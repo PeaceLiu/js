@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Localstorage</title>
+</head>
+<body>
+<div style="border: 3px dashed #ccc; width: 320px; text-align:center">
+    <label for="keyname">别名(key):</label>
+    <input type="text" id="keyname" name="keyname" class="text">
+    <br/>
+    <label for="sitename">网站名:</label>
+    <input type="text" id="sitename" name="sitename" class="text">
+    <br/>
+    <label for="address">网址:</label>
+    <input type="text" id="address" name="address" class="text">
+    <br/>
+    <input type="button"  value="新增网址" onclick="saveSite()">
+    <hr/>
+    <label for="address">输入别名（key）:</label>
+    <input type="text" id="otherName" name="otherName" class="text">
+    <br/>
+    <input type="button" value="查询网站" onclick="searchSite()">
+    <br/>
+    <input type="button" value="删除数据" onclick="clearAllData()">
+    <br/>
+ <p id="result"><br/></p>
+</div>
+<div id="list">
+
+</div>
+<script>
+
+//加载所有数据
+loadAll();
+
+// 保存新增网址
+function saveSite() {
+
+    var site = new Object;
+
+    site.keyname = document.getElementById("keyname").value;
+    site.sitename = document.getElementById("sitename").value;
+    site.address = document.getElementById("address").value;
+
+    var str = JSON.stringify(site);
+    localStorage.setItem(site.keyname,str);
+
+    alert("保存成功")
+
+}
+
+//查询网址
+function searchSite() {
+
+
+   var otherName = document.getElementById("otherName").value;
+   var str = localStorage.getItem(otherName);
+
+   var result = document.getElementById("result");
+   var site = JSON.parse(str);
+   result.innerHTML = otherName + "网站名是："+site.sitename +"网址是："+site.address  ;
+
+}
+
+//将所有存储在localStorage中的对象提取出来，并展现到界面上
+// 确保存储的 keyname 对应的值为转换对象，否则JSON.parse会报错
+function loadAll() {
+
+    var list = document.getElementById("list");
+
+    if (localStorage.length > 0)
+    {
+        var result = "<table border='1'>";
+        result += "<tr><td>别名</td><td>网站名</td><td>网址</td></tr>";
+
+        for(var i = 0;i < localStorage.length ; i++) {
+
+            var keyName = localStorage.key(i);
+            var  str = localStorage.getItem(keyName);
+            var site = JSON.parse(str);
+
+            result +=  "<tr><td>" + site.keyname + "</td><td>" + site.sitename + "</td><td>" + site.address + "</td></tr>";
+
+        }
+
+        result += "</table>"
+
+        list.innerHTML = result;
+
+    }
+
+}
+
+function clearAllData() {
+
+    //删除所有数据
+    localStorage.clear();
+
+    //删除单个数据
+//    localStorage.removeItem("baidu");
+
+//    //读取数据
+//    localStorage.getItem('key');
+//
+//    //得到某个索引Key
+//    localStorage.key("index");
+//
+//    //保存数据
+//    localStorage.setItem("key","value");
+}
+
+
+
+
+
+</script>
+
+
+
+
+
+
+</body>
+</html>
